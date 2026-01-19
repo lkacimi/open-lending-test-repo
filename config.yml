@@ -1,2 +1,2 @@
-strategy: round-robin 
-replicas: 4
+strategy: round-robin
+replicas: 6
