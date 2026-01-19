@@ -1,21 +1,20 @@
+name: Code Review with OpenAI
 on:
   pull_request:
-    types: [opened, synchronize]
-
+    types:
+      - opened
+      - synchronize
+permissions: write-all
 jobs:
-  code_review_job:
+  code_review:
     runs-on: ubuntu-latest
-    name: ChatGPT Code Review
     steps:
-      - name: GenAI Code Review
-        uses: cirolini/genai-code-review@v2
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Code Review
+        uses: yuri-val/ai-codereviewer@main
         with:
-          openai_api_key: ${{ secrets.OPEN_API_KEY }}
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          github_pr_id: ${{ github.event.number }}
-          openai_model: "gpt-3.5-turbo" # optional
-          openai_temperature: 0.5 # optional
-          openai_max_tokens: 2048 # optional
-          mode: files # files or patch
-          language: en # optional, default is 'en'
-          custom_prompt: "" # optional
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          OPENAI_API_MODEL: "gpt-4o-mini"
+          exclude: "**/*.lock,dist/**,**/*.json,**/*.md"
